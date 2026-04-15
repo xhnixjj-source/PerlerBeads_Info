@@ -14,4 +14,8 @@ export type Supplier = {
   main_products: string[];
   certification_badges: string[];
   gallery_urls?: string[];
+  /** Optional B2B profile stats (wireframe header card) */
+  established_year?: string | null;
+  factory_area?: string | null;
+  employee_count?: string | null;
 };

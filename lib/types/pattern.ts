@@ -21,4 +21,8 @@ export type Pattern = {
   seo_title?: string | null;
   seo_description?: string | null;
   created_at?: string;
+  /** Display name for wireframe "author / source" line */
+  author_name?: string | null;
+  /** Optional like count from API; UI falls back to a stable placeholder. */
+  like_count?: number | null;
 };

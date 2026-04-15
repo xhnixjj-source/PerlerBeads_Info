@@ -65,10 +65,13 @@ export function InquiryForm({
     }
   }
 
+  const field =
+    "w-full rounded-2xl border border-ink-200/90 bg-white px-4 py-3 text-brand-text outline-none transition placeholder:text-brand-text/40 focus:border-brand-secondary focus:ring-2 focus:ring-brand-secondary/20";
+
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <label htmlFor="inq-name" className="mb-1 block text-sm font-medium text-ink-700">
+        <label htmlFor="inq-name" className="mb-1 block text-sm font-medium text-brand-text/80">
           Name
         </label>
         <input
@@ -79,12 +82,12 @@ export function InquiryForm({
           autoComplete="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-ink-900 outline-none ring-ink-300 placeholder:text-ink-400 focus:ring-2"
-          placeholder="Your name"
+          className={field}
+          placeholder="Your Name"
         />
       </div>
       <div>
-        <label htmlFor="inq-email" className="mb-1 block text-sm font-medium text-ink-700">
+        <label htmlFor="inq-email" className="mb-1 block text-sm font-medium text-brand-text/80">
           Email
         </label>
         <input
@@ -95,12 +98,12 @@ export function InquiryForm({
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-ink-900 outline-none ring-ink-300 placeholder:text-ink-400 focus:ring-2"
-          placeholder="you@company.com"
+          className={field}
+          placeholder="Your Email"
         />
       </div>
       <div>
-        <label htmlFor="inq-message" className="mb-1 block text-sm font-medium text-ink-700">
+        <label htmlFor="inq-message" className="mb-1 block text-sm font-medium text-brand-text/80">
           Message
         </label>
         <textarea
@@ -110,13 +113,13 @@ export function InquiryForm({
           rows={4}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full resize-y rounded-lg border border-ink-200 bg-white px-3 py-2 text-ink-900 outline-none ring-ink-300 placeholder:text-ink-400 focus:ring-2"
-          placeholder="Tell us about quantity, timeline, or questions."
+          className={`${field} resize-y`}
+          placeholder="Your Message"
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="inq-company" className="mb-1 block text-sm font-medium text-ink-700">
+          <label htmlFor="inq-company" className="mb-1 block text-sm font-medium text-brand-text/80">
             Company (optional)
           </label>
           <input
@@ -125,12 +128,12 @@ export function InquiryForm({
             type="text"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            className="w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-ink-900 outline-none ring-ink-300 placeholder:text-ink-400 focus:ring-2"
+            className={field}
             placeholder="Company name"
           />
         </div>
         <div>
-          <label htmlFor="inq-quantity" className="mb-1 block text-sm font-medium text-ink-700">
+          <label htmlFor="inq-quantity" className="mb-1 block text-sm font-medium text-brand-text/80">
             Quantity (optional)
           </label>
           <input
@@ -139,7 +142,7 @@ export function InquiryForm({
             type="text"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
-            className="w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-ink-900 outline-none ring-ink-300 placeholder:text-ink-400 focus:ring-2"
+            className={field}
             placeholder="e.g. 200 kits"
           />
         </div>
@@ -162,9 +165,9 @@ export function InquiryForm({
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-white transition hover:bg-accent-hover disabled:opacity-60"
+        className="w-full rounded-full bg-brand-secondary px-4 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-brand-secondary-deep disabled:opacity-60"
       >
-        {status === "loading" ? "Sending…" : "Send inquiry"}
+        {status === "loading" ? "Sending…" : "Send Inquiry"}
       </button>
 
       <p className="text-center text-xs text-ink-500">
