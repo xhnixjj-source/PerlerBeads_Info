@@ -27,7 +27,15 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        sans: [
+          "system-ui",
+          "-apple-system",
+          "\"Segoe UI\"",
+          "\"PingFang SC\"",
+          "\"Hiragino Sans GB\"",
+          "\"Microsoft YaHei\"",
+          "sans-serif",
+        ],
       },
     },
   },

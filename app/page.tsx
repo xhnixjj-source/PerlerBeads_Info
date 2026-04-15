@@ -4,22 +4,7 @@ import { InquiryForm } from "@/components/InquiryForm";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-ink-200 bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
-          <span className="text-sm font-semibold tracking-tight text-ink-900">
-            Bead Pattern Lab
-          </span>
-          <Link
-            href="/wholesale"
-            className="text-sm font-medium text-accent hover:text-accent-hover"
-          >
-            Wholesale
-          </Link>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
             Image to Bead Pattern Generator
@@ -54,11 +39,6 @@ export default function HomePage() {
             <InquiryForm source="home" />
           </div>
         </section>
-      </main>
-
-      <footer className="border-t border-ink-200 py-8 text-center text-xs text-ink-500">
-        MVP for traffic & lead tests — not affiliated with any bead brand.
-      </footer>
-    </div>
+    </main>
   );
 }

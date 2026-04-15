@@ -3,18 +3,27 @@
 import { useState } from "react";
 import Link from "next/link";
 
-type Source = "home" | "wholesale";
+type Source = "home" | "wholesale" | "supplier";
 
 type Props = {
   source?: Source;
+  supplierId?: string;
   /** Footer link label (default: Back to generator) */
   backLabel?: string;
 };
 
-export function InquiryForm({ source = "home", backLabel = "Back to generator" }: Props) {
+export function InquiryForm({
+  source = "home",
+  supplierId,
+  backLabel = "Back to generator",
+}: Props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState("");
+  const [startedAt] = useState(() => Date.now());
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -26,7 +35,17 @@ export function InquiryForm({ source = "home", backLabel = "Back to generator" }
       const res = await fetch("/api/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message, source }),
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          quantity,
+          message,
+          source,
+          supplierId,
+          website,
+          elapsedMs: Date.now() - startedAt,
+        }),
       });
       const data = (await res.json()) as { ok?: boolean; error?: string };
       if (!res.ok || !data.ok) {
@@ -37,6 +56,8 @@ export function InquiryForm({ source = "home", backLabel = "Back to generator" }
       setStatus("success");
       setName("");
       setEmail("");
+      setCompany("");
+      setQuantity("");
       setMessage("");
     } catch {
       setStatus("error");
@@ -93,6 +114,45 @@ export function InquiryForm({ source = "home", backLabel = "Back to generator" }
           placeholder="Tell us about quantity, timeline, or questions."
         />
       </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="inq-company" className="mb-1 block text-sm font-medium text-ink-700">
+            Company (optional)
+          </label>
+          <input
+            id="inq-company"
+            name="company"
+            type="text"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            className="w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-ink-900 outline-none ring-ink-300 placeholder:text-ink-400 focus:ring-2"
+            placeholder="Company name"
+          />
+        </div>
+        <div>
+          <label htmlFor="inq-quantity" className="mb-1 block text-sm font-medium text-ink-700">
+            Quantity (optional)
+          </label>
+          <input
+            id="inq-quantity"
+            name="quantity"
+            type="text"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            className="w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-ink-900 outline-none ring-ink-300 placeholder:text-ink-400 focus:ring-2"
+            placeholder="e.g. 200 kits"
+          />
+        </div>
+      </div>
+      <input
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        name="website"
+      />
 
       {errorMsg && <p className="text-sm text-red-600">{errorMsg}</p>}
       {status === "success" && (
