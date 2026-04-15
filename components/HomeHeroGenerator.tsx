@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Generator } from "@/components/Generator";
 
 export function HomeHeroGenerator() {
   return (
@@ -12,22 +11,22 @@ export function HomeHeroGenerator() {
             Image to Bead Pattern Generator
           </h1>
           <p className="mt-3 text-base text-brand-text/80 sm:text-lg">
-            Transform photos into pixel art designs — pick a grid, tune colors, and preview your bead
-            masterpiece in the browser.
+            Upload, crop, pick board size &amp; color kit — we match beads with CIEDE2000, then download PNG
+            and a checklist. Optional color editing after export.
           </p>
         </div>
-        <div className="mx-auto mt-8 max-w-4xl">
-          <Generator variant="home" />
-        </div>
-        <p className="mx-auto mt-6 max-w-xl text-center text-sm text-brand-text/70">
-          Need the full tool page?{" "}
+        <div className="mx-auto mt-8 max-w-lg rounded-3xl border border-ink-200/90 bg-white/95 p-8 text-center shadow-xl backdrop-blur-sm">
+          <p className="text-sm text-brand-text/75">
+            The full 6-step wizard (upload → crop → size → pattern → download → edit) lives on the tools
+            page — same PerlerHub styling as the rest of the site.
+          </p>
           <Link
             href="/tools/image-to-pattern"
-            className="font-semibold text-brand-secondary underline-offset-2 hover:underline"
+            className="mt-6 inline-flex rounded-full bg-gradient-to-r from-brand-primary to-brand-coral px-8 py-3.5 text-sm font-bold text-white shadow-md transition hover:brightness-105"
           >
-            Open dedicated workspace
+            Open pattern generator
           </Link>
-        </p>
+        </div>
       </div>
     </section>
   );

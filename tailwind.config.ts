@@ -39,8 +39,25 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        heading: ["var(--font-heading)", "Nunito", "system-ui", "sans-serif"],
+        sans: [
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Microsoft YaHei",
+          "sans-serif",
+        ],
+        /** Slightly round / friendly fallbacks without loading Google Fonts at build. */
+        heading: [
+          "Segoe UI",
+          "system-ui",
+          "-apple-system",
+          "PingFang SC",
+          "Microsoft YaHei",
+          "sans-serif",
+        ],
       },
       fontSize: {
         display: ["2.25rem", { lineHeight: "1.15" }],
