@@ -1,23 +1,25 @@
 import Link from "next/link";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { GlobalSearch } from "@/components/GlobalSearch";
 import { NavDropdown } from "@/components/NavDropdown";
 import { PerlerHubLogo } from "@/components/PerlerHubLogo";
+import type { Messages } from "@/messages";
 
-const patternsItems = [
-  { label: "All patterns", href: "/patterns" },
-  { label: "Anime", href: "/patterns?tag=anime" },
-  { label: "Games", href: "/patterns?tag=games" },
-  { label: "Holidays", href: "/patterns?tag=holidays" },
-  { label: "3D", href: "/patterns?tag=3d" },
-  { label: "Animals", href: "/patterns?tag=animals" },
-];
+export function SiteHeader({ messages: m }: { messages: Messages }) {
+  const patternsItems = [
+    { label: m.nav.patternsAll, href: "/patterns" },
+    { label: m.nav.patternsAnime, href: "/patterns?tag=anime" },
+    { label: m.nav.patternsGames, href: "/patterns?tag=games" },
+    { label: m.nav.patternsHolidays, href: "/patterns?tag=holidays" },
+    { label: m.nav.patterns3d, href: "/patterns?tag=3d" },
+    { label: m.nav.patternsAnimals, href: "/patterns?tag=animals" },
+  ];
 
-const toolsItems = [
-  { label: "Image to Pattern", href: "/tools/image-to-pattern" },
-  { label: "Color Converter", href: "/tools/color-converter" },
-];
+  const toolsItems = [
+    { label: m.nav.toolsImage, href: "/tools/image-to-pattern" },
+    { label: m.nav.toolsColor, href: "/tools/color-converter" },
+  ];
 
-export function SiteHeader() {
   return (
     <header className="border-b border-ink-200/90 bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
@@ -28,7 +30,7 @@ export function SiteHeader() {
               <Link
                 href="#cart"
                 className="relative rounded-xl p-2 text-brand-text/70 hover:bg-brand-mint/30"
-                aria-label="Cart"
+                aria-label={m.nav.cartAria}
               >
                 <CartIcon />
                 <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-coral px-1 text-[10px] font-bold text-white">
@@ -43,43 +45,44 @@ export function SiteHeader() {
               href="/"
               className="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-emerald-600 hover:bg-brand-mint/20"
             >
-              Home
+              {m.nav.home}
             </Link>
             <Link
               href="/suppliers"
               className="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-rose-500 hover:bg-rose-50"
             >
-              Directory
+              {m.nav.directory}
             </Link>
-            <NavDropdown label="Patterns" items={patternsItems} summaryClassName="text-orange-500" />
+            <NavDropdown label={m.nav.patterns} items={patternsItems} summaryClassName="text-orange-500" />
             <Link
               href="/creators"
               className="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-violet-600 hover:bg-violet-50"
             >
-              Community
+              {m.nav.community}
             </Link>
             <Link
               href="/learn"
               className="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-sky-600 hover:bg-sky-50"
             >
-              Blog
+              {m.nav.blog}
             </Link>
-            <NavDropdown label="Tools" items={toolsItems} summaryClassName="text-amber-600" />
+            <NavDropdown label={m.nav.tools} items={toolsItems} summaryClassName="text-amber-600" />
             <Link
               href="/#quick-inquiry"
               className="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-brand-secondary hover:bg-brand-secondary/10"
             >
-              Contact
+              {m.nav.contact}
             </Link>
           </nav>
 
           <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:max-w-xl">
             <GlobalSearch />
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
+              <LanguageSwitcher />
               <Link
                 href="#cart"
                 className="relative hidden rounded-xl p-2 text-brand-text/70 hover:bg-brand-mint/30 lg:inline-flex"
-                aria-label="Cart"
+                aria-label={m.nav.cartAria}
               >
                 <CartIcon />
                 <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-coral px-1 text-[10px] font-bold text-white">
@@ -87,19 +90,19 @@ export function SiteHeader() {
                 </span>
               </Link>
               <Link href="#sign-in" className="text-sm font-medium text-brand-text/70 hover:text-brand-text">
-                Sign In
+                {m.nav.signIn}
               </Link>
               <Link
                 href="#sign-up"
                 className="text-sm font-medium text-brand-secondary hover:text-brand-secondary-deep"
               >
-                Sign Up
+                {m.nav.signUp}
               </Link>
               <Link
                 href="/wholesale"
                 className="inline-flex rounded-full bg-gradient-to-r from-brand-primary to-brand-coral px-4 py-2.5 text-xs font-bold text-white shadow-md transition hover:brightness-105 sm:text-sm"
               >
-                Buy Complete Kit
+                {m.nav.buyKit}
               </Link>
             </div>
           </div>
@@ -107,25 +110,25 @@ export function SiteHeader() {
 
         <div className="mt-3 flex flex-wrap gap-2 border-t border-ink-100 pt-3 lg:hidden">
           <Link href="/" className="text-xs font-semibold text-emerald-600">
-            Home
+            {m.nav.home}
           </Link>
           <Link href="/suppliers" className="text-xs font-semibold text-rose-500">
-            Directory
+            {m.nav.directory}
           </Link>
           <Link href="/patterns" className="text-xs font-semibold text-orange-500">
-            Patterns
+            {m.nav.patterns}
           </Link>
           <Link href="/creators" className="text-xs font-semibold text-violet-600">
-            Community
+            {m.nav.community}
           </Link>
           <Link href="/learn" className="text-xs font-semibold text-sky-600">
-            Blog
+            {m.nav.blog}
           </Link>
           <Link href="/tools/image-to-pattern" className="text-xs font-semibold text-amber-600">
-            Tools
+            {m.nav.tools}
           </Link>
           <Link href="/#quick-inquiry" className="text-xs font-semibold text-brand-secondary">
-            Contact
+            {m.nav.contact}
           </Link>
         </div>
       </div>

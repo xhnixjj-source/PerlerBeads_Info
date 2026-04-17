@@ -62,6 +62,15 @@ const config: Config = {
       fontSize: {
         display: ["2.25rem", { lineHeight: "1.15" }],
       },
+      keyframes: {
+        "toast-in": {
+          "0%": { opacity: "0", transform: "translateY(18px) scale(0.96)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
+      },
+      animation: {
+        "toast-in": "toast-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+      },
     },
   },
   plugins: [],

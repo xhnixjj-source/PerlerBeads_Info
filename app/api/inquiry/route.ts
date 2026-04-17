@@ -5,7 +5,9 @@ export const runtime = "nodejs";
 
 type Body = {
   name?: string;
+  buyer_name?: string;
   email?: string;
+  buyer_email?: string;
   company?: string;
   quantity?: string;
   message?: string;
@@ -89,8 +91,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
   }
 
-  const name = body.name?.trim();
-  const email = body.email?.trim();
+  const name = (body.name ?? body.buyer_name)?.trim();
+  const email = (body.email ?? body.buyer_email)?.trim();
   const company = body.company?.trim();
   const quantity = body.quantity?.trim();
   const message = body.message?.trim();
@@ -128,6 +130,7 @@ export async function POST(request: Request) {
 
   try {
     const supabase = createSupabaseAdmin();
+    // Table columns are `name` / `email` (B2B buyer identity); buyer_* aliases accepted in JSON.
     const { error } = await supabase.from("inquiries").insert({
       name,
       email,

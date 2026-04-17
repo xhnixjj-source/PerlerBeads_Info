@@ -34,32 +34,32 @@ export default function AdminAiPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
-      <h1 className="text-2xl font-bold text-ink-900">AI Pattern Analyzer</h1>
-      <p className="mt-2 text-sm text-ink-600">
-        Paste an image URL to generate title/description/tags/color summary for manual review.
+    <main className="mx-auto w-full max-w-4xl">
+      <h1 className="font-heading text-2xl font-bold text-slate-100">AI pattern analyzer</h1>
+      <p className="mt-2 text-sm text-slate-400">
+        Paste an image URL to generate title, description, tags, and color summary for manual review.
       </p>
-      <form onSubmit={onSubmit} className="mt-5 flex gap-3">
+      <form onSubmit={onSubmit} className="mt-5 flex flex-col gap-3 sm:flex-row">
         <input
           type="url"
           required
           value={imageUrl}
           onChange={(e) => setImageUrl(e.target.value)}
-          className="flex-1 rounded-lg border border-ink-200 px-3 py-2"
+          className="flex-1 rounded-xl border border-slate-600 bg-slate-950/60 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-fuchsia-500/60 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/30"
           placeholder="https://..."
         />
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-ink-900 px-4 py-2 text-sm font-semibold text-white"
+          className="rounded-xl bg-gradient-to-r from-fuchsia-500 to-teal-400 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-md hover:brightness-105 disabled:opacity-60"
         >
-          {loading ? "Analyzing..." : "Analyze"}
+          {loading ? "Analyzing…" : "Analyze"}
         </button>
       </form>
 
       {result && (
-        <pre className="mt-6 overflow-auto rounded-2xl border border-ink-200 bg-white p-4 text-xs text-ink-700">
-{JSON.stringify({ provider, result }, null, 2)}
+        <pre className="mt-6 max-h-[min(70vh,32rem)] overflow-auto rounded-2xl border border-slate-700 bg-slate-950/60 p-4 text-xs text-slate-300">
+          {JSON.stringify({ provider, result }, null, 2)}
         </pre>
       )}
     </main>

@@ -1,6 +1,6 @@
+import { jsonError, requireAdminRequest, requireServiceClient } from "@/lib/admin/api-auth";
+import { canAccess } from "@/lib/admin/permissions";
 import { NextResponse } from "next/server";
-import { adminCookieName } from "@/lib/admin-auth";
-import { createSupabaseServiceClient } from "@/lib/supabase/server";
 
 type Status = "New" | "Contacted" | "Closed";
 
@@ -9,11 +9,10 @@ function validateStatus(value: unknown): value is Status {
 }
 
 export async function POST(request: Request, context: { params: { id: string } }) {
-  const token = process.env.ADMIN_DASHBOARD_PASSWORD;
-  const cookieHeader = request.headers.get("cookie") || "";
-  const expected = `${adminCookieName()}=${token}`;
-  if (!token || !cookieHeader.includes(expected)) {
-    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+  const auth = await requireAdminRequest();
+  if (!auth.ok) return auth.response;
+  if (!canAccess(auth.ctx.role, "inquiries", "POST")) {
+    return jsonError(403, "Forbidden", "forbidden");
   }
 
   let body: { status?: Status };
@@ -26,10 +25,9 @@ export async function POST(request: Request, context: { params: { id: string } }
     return NextResponse.json({ ok: false, error: "Invalid status" }, { status: 400 });
   }
 
-  const supabase = createSupabaseServiceClient();
-  if (!supabase) {
-    return NextResponse.json({ ok: false, error: "Supabase not configured" }, { status: 500 });
-  }
+  const svc = requireServiceClient();
+  if (!svc.ok) return svc.response;
+  const { supabase } = svc;
 
   const { error } = await supabase
     .from("inquiries")

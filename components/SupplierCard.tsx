@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Supplier } from "@/lib/types/supplier";
+import { demoSupplierInquiries30d, demoSupplierResponseHours } from "@/lib/demo-stats";
 
 type Props = {
   supplier: Supplier;
@@ -18,6 +19,13 @@ export function SupplierCard({ supplier }: Props) {
       </div>
       <p className="mt-2 text-sm text-ink-600">{supplier.location}</p>
       <p className="mt-3 line-clamp-2 text-sm text-ink-700">{supplier.description}</p>
+      <p
+        className="mt-2 text-[11px] text-ink-500"
+        title="Illustrative numbers for the demo — not live analytics."
+      >
+        Demo: ~{demoSupplierInquiries30d(supplier.slug)} inquiries (30d) · typical reply under{" "}
+        {demoSupplierResponseHours(supplier.slug)}h
+      </p>
       <div className="mt-4 flex flex-wrap gap-2 text-xs">
         <span className="rounded-full bg-ink-100 px-2 py-1 text-ink-700">{supplier.factory_type}</span>
         <span className="rounded-full bg-ink-100 px-2 py-1 text-ink-700">MOQ: {supplier.moq}</span>

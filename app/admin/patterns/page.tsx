@@ -1,34 +1,19 @@
-import { getPatterns } from "@/lib/catalog";
+import { PatternsAdminTable } from "@/components/admin/PatternsAdminTable";
+import { loadAdminPatterns } from "@/lib/admin/list-data";
 
-export default async function AdminPatternsPage() {
-  const patterns = await getPatterns();
+export const dynamic = "force-dynamic";
+
+export default async function AdminPatternsListPage() {
+  const patterns = await loadAdminPatterns();
+  const rows = patterns.map((p) => ({ ...p }) as Record<string, unknown>);
 
   return (
-    <section className="rounded-2xl border border-ink-200 bg-white p-5 shadow-sm">
-      <h2 className="text-lg font-semibold text-ink-900">Patterns</h2>
-      <p className="mt-1 text-sm text-ink-600">Read-only list for quick QA before adding editor forms.</p>
-      <div className="mt-4 overflow-x-auto">
-        <table className="min-w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-ink-200 text-ink-500">
-              <th className="py-2 pr-4">Title</th>
-              <th className="py-2 pr-4">Slug</th>
-              <th className="py-2 pr-4">Difficulty</th>
-              <th className="py-2 pr-4">Beads</th>
-            </tr>
-          </thead>
-          <tbody>
-            {patterns.map((item) => (
-              <tr key={item.id} className="border-b border-ink-100">
-                <td className="py-2 pr-4 text-ink-900">{item.title}</td>
-                <td className="py-2 pr-4 text-ink-600">{item.slug}</td>
-                <td className="py-2 pr-4 text-ink-600">{item.difficulty}</td>
-                <td className="py-2 pr-4 text-ink-600">{item.bead_count}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="space-y-6">
+      <div>
+        <h1 className="font-heading text-2xl font-bold text-slate-100">Patterns</h1>
+        <p className="mt-1 text-sm text-slate-400">Titles, difficulty, and bead counts.</p>
       </div>
-    </section>
+      <PatternsAdminTable rows={rows} />
+    </div>
   );
 }

@@ -1,22 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useSiteLocale } from "@/components/i18n/SiteLocaleProvider";
+import { ActionToast } from "@/components/ui/ActionToast";
 import Link from "next/link";
+import { useCallback, useState } from "react";
 
 type Source = "home" | "wholesale" | "supplier";
 
 type Props = {
   source?: Source;
   supplierId?: string;
-  /** Footer link label (default: Back to generator) */
+  /** Overrides footer link label (defaults to “back to generator” copy). */
   backLabel?: string;
 };
 
-export function InquiryForm({
-  source = "home",
-  supplierId,
-  backLabel = "Back to generator",
-}: Props) {
+export function InquiryForm({ source = "home", supplierId, backLabel }: Props) {
+  const { messages: t } = useSiteLocale();
+  const linkLabel = backLabel ?? t.inquiry.backGenerator;
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
@@ -26,6 +27,12 @@ export function InquiryForm({
   const [startedAt] = useState(() => Date.now());
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastVariant, setToastVariant] = useState<"success" | "error">("success");
+  const [toastTitle, setToastTitle] = useState("");
+  const [toastDescription, setToastDescription] = useState<string | undefined>(undefined);
+
+  const dismissToast = useCallback(() => setToastOpen(false), []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,7 +57,12 @@ export function InquiryForm({
       const data = (await res.json()) as { ok?: boolean; error?: string };
       if (!res.ok || !data.ok) {
         setStatus("error");
-        setErrorMsg(data.error ?? "Something went wrong.");
+        const msg = data.error ?? t.inquiry.genericError;
+        setErrorMsg(msg);
+        setToastVariant("error");
+        setToastTitle(t.inquiry.toastErrSend);
+        setToastDescription(msg);
+        setToastOpen(true);
         return;
       }
       setStatus("success");
@@ -59,9 +71,17 @@ export function InquiryForm({
       setCompany("");
       setQuantity("");
       setMessage("");
+      setToastVariant("success");
+      setToastTitle(t.inquiry.toastOkTitle);
+      setToastDescription(t.inquiry.toastOkDesc);
+      setToastOpen(true);
     } catch {
       setStatus("error");
-      setErrorMsg("Network error. Try again.");
+      setErrorMsg(t.inquiry.toastErrNet);
+      setToastVariant("error");
+      setToastTitle(t.inquiry.toastErrNet);
+      setToastDescription(t.inquiry.genericError);
+      setToastOpen(true);
     }
   }
 
@@ -72,7 +92,7 @@ export function InquiryForm({
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
         <label htmlFor="inq-name" className="mb-1 block text-sm font-medium text-brand-text/80">
-          Name
+          {t.inquiry.name}
         </label>
         <input
           id="inq-name"
@@ -83,12 +103,12 @@ export function InquiryForm({
           value={name}
           onChange={(e) => setName(e.target.value)}
           className={field}
-          placeholder="Your Name"
+          placeholder={t.inquiry.namePh}
         />
       </div>
       <div>
         <label htmlFor="inq-email" className="mb-1 block text-sm font-medium text-brand-text/80">
-          Email
+          {t.inquiry.email}
         </label>
         <input
           id="inq-email"
@@ -99,12 +119,12 @@ export function InquiryForm({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className={field}
-          placeholder="Your Email"
+          placeholder={t.inquiry.emailPh}
         />
       </div>
       <div>
         <label htmlFor="inq-message" className="mb-1 block text-sm font-medium text-brand-text/80">
-          Message
+          {t.inquiry.message}
         </label>
         <textarea
           id="inq-message"
@@ -114,13 +134,13 @@ export function InquiryForm({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           className={`${field} resize-y`}
-          placeholder="Your Message"
+          placeholder={t.inquiry.messagePh}
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="inq-company" className="mb-1 block text-sm font-medium text-brand-text/80">
-            Company (optional)
+            {t.inquiry.company}
           </label>
           <input
             id="inq-company"
@@ -129,12 +149,12 @@ export function InquiryForm({
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             className={field}
-            placeholder="Company name"
+            placeholder={t.inquiry.companyPh}
           />
         </div>
         <div>
           <label htmlFor="inq-quantity" className="mb-1 block text-sm font-medium text-brand-text/80">
-            Quantity (optional)
+            {t.inquiry.quantity}
           </label>
           <input
             id="inq-quantity"
@@ -143,7 +163,7 @@ export function InquiryForm({
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
             className={field}
-            placeholder="e.g. 200 kits"
+            placeholder={t.inquiry.quantityPh}
           />
         </div>
       </div>
@@ -158,24 +178,29 @@ export function InquiryForm({
       />
 
       {errorMsg && <p className="text-sm text-red-600">{errorMsg}</p>}
-      {status === "success" && (
-        <p className="text-sm text-emerald-700">Thanks — we received your message.</p>
-      )}
 
       <button
         type="submit"
         disabled={status === "loading"}
         className="w-full rounded-full bg-brand-secondary px-4 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-brand-secondary-deep disabled:opacity-60"
       >
-        {status === "loading" ? "Sending…" : "Send Inquiry"}
+        {status === "loading" ? t.inquiry.sending : t.inquiry.send}
       </button>
 
       <p className="text-center text-xs text-ink-500">
-        By submitting, you agree to be contacted about this inquiry.{" "}
+        {t.inquiry.agree}{" "}
         <Link href="/" className="text-ink-700 underline underline-offset-2">
-          {backLabel}
+          {linkLabel}
         </Link>
       </p>
+
+      <ActionToast
+        show={toastOpen}
+        variant={toastVariant}
+        title={toastTitle}
+        description={toastDescription}
+        onDismiss={dismissToast}
+      />
     </form>
   );
 }

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Supplier } from "@/lib/types/supplier";
+import { demoSupplierInquiries30d, demoSupplierResponseHours } from "@/lib/demo-stats";
 
 type Props = {
   supplier: Supplier;
@@ -30,6 +31,18 @@ export function HomeSupplierCard({ supplier }: Props) {
         <p className="mt-1 text-sm text-brand-text/65">{supplier.location}</p>
         <p className="mt-1 text-xs font-medium uppercase tracking-wide text-brand-text/50">
           {supplier.factory_type}
+        </p>
+        <p
+          className="mt-2 text-[11px] leading-snug text-brand-text/55"
+          title="Illustrative numbers for the demo — not live analytics."
+        >
+          <span className="font-semibold text-brand-text/70">
+            ~{demoSupplierInquiries30d(supplier.slug)}
+          </span>{" "}
+          inquiries (30d, sim.)
+          <span className="text-brand-text/40"> · </span>
+          reply often under{" "}
+          <span className="font-semibold text-brand-text/70">{demoSupplierResponseHours(supplier.slug)}h</span>
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {supplier.main_products.slice(0, 3).map((p) => (

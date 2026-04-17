@@ -1,34 +1,19 @@
-import { getSuppliers } from "@/lib/catalog";
+import { SuppliersAdminTable } from "@/components/admin/SuppliersAdminTable";
+import { loadAdminSuppliers } from "@/lib/admin/list-data";
 
-export default async function AdminSuppliersPage() {
-  const suppliers = await getSuppliers();
+export const dynamic = "force-dynamic";
+
+export default async function AdminSuppliersListPage() {
+  const suppliers = await loadAdminSuppliers();
+  const rows = suppliers.map((s) => ({ ...s }) as Record<string, unknown>);
 
   return (
-    <section className="rounded-2xl border border-ink-200 bg-white p-5 shadow-sm">
-      <h2 className="text-lg font-semibold text-ink-900">Suppliers</h2>
-      <p className="mt-1 text-sm text-ink-600">Read-only list with quick quality checks.</p>
-      <div className="mt-4 overflow-x-auto">
-        <table className="min-w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-ink-200 text-ink-500">
-              <th className="py-2 pr-4">Company</th>
-              <th className="py-2 pr-4">Location</th>
-              <th className="py-2 pr-4">MOQ</th>
-              <th className="py-2 pr-4">Verified</th>
-            </tr>
-          </thead>
-          <tbody>
-            {suppliers.map((item) => (
-              <tr key={item.id} className="border-b border-ink-100">
-                <td className="py-2 pr-4 text-ink-900">{item.company_name}</td>
-                <td className="py-2 pr-4 text-ink-600">{item.location}</td>
-                <td className="py-2 pr-4 text-ink-600">{item.moq}</td>
-                <td className="py-2 pr-4 text-ink-600">{item.is_verified ? "Yes" : "No"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="space-y-6">
+      <div>
+        <h1 className="font-heading text-2xl font-bold text-slate-100">Suppliers</h1>
+        <p className="mt-1 text-sm text-slate-400">Directory, verification, and supplier-facing JSON fields.</p>
       </div>
-    </section>
+      <SuppliersAdminTable rows={rows} />
+    </div>
   );
 }

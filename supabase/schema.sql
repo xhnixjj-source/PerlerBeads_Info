@@ -102,7 +102,7 @@ create table if not exists public.orders (
   shipping_address jsonb,
   amount_total int not null default 0,
   currency text not null default 'usd',
-  status text not null default 'Paid' check (status in ('Paid', 'Shipped', 'Delivered', 'Canceled')),
+  status text not null default 'Paid' check (status in ('Pending', 'Paid', 'Shipped', 'Delivered', 'Canceled')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

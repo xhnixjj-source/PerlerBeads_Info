@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { formatTpl } from "@/lib/i18n/format";
+import type { Messages } from "@/messages";
 
 const social = [
   {
@@ -12,56 +14,57 @@ const social = [
   { label: "Facebook", href: "https://facebook.com", icon: FacebookIcon },
 ];
 
-export function SiteFooter() {
+export function SiteFooter({ messages: m }: { messages: Messages }) {
+  const copyright = formatTpl(m.footer.copyright, { year: new Date().getFullYear() });
   return (
     <footer className="mt-14 bg-brand-surface">
       <div className="rainbow-rule mx-auto max-w-7xl" aria-hidden />
       <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 text-sm sm:px-6 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="font-heading font-bold text-brand-text">About</p>
+          <p className="font-heading font-bold text-brand-text">{m.footer.about}</p>
           <ul className="mt-3 space-y-2 text-brand-text/75">
             <li>
               <Link href="/#about" className="hover:text-brand-text">
-                About Us
+                {m.footer.aboutUs}
               </Link>
             </li>
             <li>
               <Link href="/#quick-inquiry" className="hover:text-brand-text">
-                Contact
+                {m.footer.contact}
               </Link>
             </li>
             <li>
-              <span className="cursor-not-allowed opacity-60">Terms of Service</span>
+              <span className="cursor-not-allowed opacity-60">{m.footer.terms}</span>
             </li>
             <li>
-              <span className="cursor-not-allowed opacity-60">Privacy Policy</span>
+              <span className="cursor-not-allowed opacity-60">{m.footer.privacy}</span>
             </li>
             <li>
-              <span className="cursor-not-allowed opacity-60">FAQs</span>
+              <span className="cursor-not-allowed opacity-60">{m.footer.faqs}</span>
             </li>
           </ul>
         </div>
 
         <div>
-          <p className="font-heading font-bold text-brand-text">Quick links</p>
+          <p className="font-heading font-bold text-brand-text">{m.footer.quickLinks}</p>
           <ul className="mt-3 space-y-2">
             <Link
               className="block text-brand-text/75 hover:text-brand-text"
               href="/patterns?tag=anime"
             >
-              Popular: Anime patterns
+              {m.footer.popularAnime}
             </Link>
             <Link className="block text-brand-text/75 hover:text-brand-text" href="/suppliers">
-              Supplier directory
+              {m.footer.supplierDir}
             </Link>
             <Link className="block text-brand-text/75 hover:text-brand-text" href="/learn#buying-guide">
-              Buying guide
+              {m.footer.buyingGuide}
             </Link>
           </ul>
         </div>
 
         <div>
-          <p className="font-heading font-bold text-brand-text">Social</p>
+          <p className="font-heading font-bold text-brand-text">{m.footer.social}</p>
           <ul className="mt-3 flex flex-wrap gap-3">
             {social.map((s) => (
               <li key={s.label}>
@@ -83,11 +86,7 @@ export function SiteFooter() {
           <NewsletterForm />
         </div>
       </div>
-      <div className="border-t border-ink-200/80 py-6 text-center text-xs text-brand-text/55">
-        © {new Date().getFullYear()} PerlerHub. All rights reserved. Let&apos;s fuse creativity
-        together! — Directory &amp; tools for enthusiasts &amp; businesses. Not affiliated with any
-        bead brand.
-      </div>
+      <div className="border-t border-ink-200/80 py-6 text-center text-xs text-brand-text/55">{copyright}</div>
     </footer>
   );
 }

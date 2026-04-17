@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
+import { getHtmlLang } from "@/lib/i18n/server";
 import "./globals.css";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
 
 /** Fonts use system stacks only — avoids next/font/google fetching Google at build time (fails offline / blocked regions). */
 
@@ -16,12 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="font-sans antialiased">
-        <SiteHeader />
-        {children}
-        <SiteFooter />
-      </body>
+    <html lang={getHtmlLang()}>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }

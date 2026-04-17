@@ -2,6 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Pattern } from "@/lib/types/pattern";
 import { formatLikeCount, stableLikeCount } from "@/lib/engagement";
+import {
+  demoConcurrentHint,
+  demoSaveCount,
+  demoWeeklyViews,
+  formatDemoCount,
+} from "@/lib/demo-stats";
 import { paletteColorCount } from "@/lib/pattern-utils";
 
 type Props = {
@@ -12,6 +18,9 @@ export function TrendingPatternCard({ pattern }: Props) {
   const colors = paletteColorCount(pattern);
   const likes = pattern.like_count ?? stableLikeCount(pattern.id);
   const author = pattern.author_name ?? "Community";
+  const views = demoWeeklyViews(pattern.slug);
+  const saves = demoSaveCount(pattern.slug);
+  const peers = demoConcurrentHint(pattern.slug);
 
   return (
     <article className="w-[min(260px,85vw)] shrink-0 snap-start overflow-hidden rounded-2xl border border-ink-200/90 bg-white shadow-md">
@@ -54,6 +63,16 @@ export function TrendingPatternCard({ pattern }: Props) {
           <HeartIcon />
           <span className="font-semibold">{formatLikeCount(likes)}</span>
         </div>
+        <p
+          className="text-[11px] leading-snug text-brand-text/55"
+          title="Illustrative numbers for the demo — not live analytics."
+        >
+          <span className="font-semibold text-brand-text/70">{formatDemoCount(views)}</span> views/wk
+          <span className="text-brand-text/40"> · </span>
+          <span className="font-semibold text-brand-text/70">{saves}</span> saves
+          <span className="text-brand-text/40"> · </span>
+          <span className="font-semibold text-brand-text/70">{peers}</span> sim. active
+        </p>
         <div className="flex flex-col gap-2 pt-1">
           <button
             type="button"

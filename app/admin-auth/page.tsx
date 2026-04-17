@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
         setError("Invalid admin password.");
         return;
       }
-      router.push("/admin");
+      router.push("/admin/dashboard");
       router.refresh();
     } catch {
       setError("Network error.");
