@@ -11,6 +11,7 @@ export const ja: Messages = {
   },
   nav: {
     home: "ホーム",
+    shop: "ストア",
     directory: "ディレクトリ",
     patterns: "図案",
     community: "コミュニティ",
@@ -19,6 +20,7 @@ export const ja: Messages = {
     contact: "お問い合わせ",
     signIn: "ログイン",
     signUp: "新規登録",
+    signOut: "ログアウト",
     buyKit: "フルキットを購入",
     cartAria: "カート",
     patternsAll: "すべての図案",

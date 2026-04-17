@@ -11,6 +11,7 @@ export const zh: Messages = {
   },
   nav: {
     home: "首页",
+    shop: "商城",
     directory: "供应商",
     patterns: "图纸",
     community: "社区",
@@ -19,6 +20,7 @@ export const zh: Messages = {
     contact: "联系",
     signIn: "登录",
     signUp: "注册",
+    signOut: "退出",
     buyKit: "购买整套装",
     cartAria: "购物车",
     patternsAll: "全部图纸",

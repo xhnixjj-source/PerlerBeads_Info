@@ -18,11 +18,20 @@ export const supplierCreateSchema = z.object({
 
 export const supplierUpdateSchema = supplierCreateSchema.partial();
 
+export const categoryCreateSchema = z.object({
+  name: z.string().min(1).max(200),
+  slug: z.string().min(1).max(200),
+  description: z.string().max(5000).optional().default(""),
+  sort_order: z.coerce.number().int().min(0).optional().default(0),
+  is_active: z.boolean().optional().default(true),
+});
+
+export const categoryUpdateSchema = categoryCreateSchema.partial();
+
 export const productCreateSchema = z.object({
   slug: z.string().min(1).max(300),
-  supplier_id: z.string().uuid(),
+  category_id: z.string().uuid(),
   name: z.string().min(1).max(500),
-  category: z.string().max(200).optional().default(""),
   description: z.string().max(20000).optional().default(""),
   price_usd: z.coerce.number().min(0).optional().nullable(),
   price_cny: z.coerce.number().min(0).optional().nullable(),
@@ -33,6 +42,7 @@ export const productCreateSchema = z.object({
   specifications: z.record(z.string(), z.unknown()).optional().default({}),
   tags: z.array(z.unknown()).optional().default([]),
   featured: z.boolean().optional().default(false),
+  list_status: z.enum(["draft", "published"]).optional().default("draft"),
 });
 
 export const productUpdateSchema = productCreateSchema.partial();
@@ -59,8 +69,11 @@ export const patternUpdateSchema = patternCreateSchema.partial();
 export const orderUpdateSchema = z.object({
   status: z.string().min(1).max(64).optional(),
   total_price: z.coerce.number().min(0).optional(),
-  pattern_id: z.string().uuid().optional(),
+  pattern_id: z.string().uuid().nullable().optional(),
   order_number: z.string().max(120).optional(),
+  user_id: z.string().uuid().nullable().optional(),
+  order_type: z.enum(["pattern_kit", "shop"]).optional(),
+  shipping_address: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const inquiryUpdateSchema = z.object({

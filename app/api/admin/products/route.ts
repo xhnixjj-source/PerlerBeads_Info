@@ -24,16 +24,16 @@ export async function GET(request: Request) {
 
   if (q) {
     const p = `%${q}%`;
-    query = query.or(`name.ilike.${p},slug.ilike.${p},sku.ilike.${p},category.ilike.${p}`);
+    query = query.or(`name.ilike.${p},slug.ilike.${p},sku.ilike.${p}`);
   }
-  if (typeof filter.category === "string" && filter.category.trim()) {
-    query = query.eq("category", filter.category.trim());
+  if (typeof filter.category_id === "string" && filter.category_id) {
+    query = query.eq("category_id", filter.category_id);
   }
   if (typeof filter.featured === "boolean") {
     query = query.eq("featured", filter.featured);
   }
-  if (typeof filter.supplier_id === "string" && filter.supplier_id) {
-    query = query.eq("supplier_id", filter.supplier_id);
+  if (typeof filter.list_status === "string" && filter.list_status.trim()) {
+    query = query.eq("list_status", filter.list_status.trim());
   }
 
   query = query.order("created_at", { ascending: false }).range(offset, offset + limit - 1);

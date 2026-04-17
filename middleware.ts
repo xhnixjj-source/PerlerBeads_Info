@@ -1,4 +1,5 @@
 import { getNextAuthSecret } from "@/lib/next-auth-secret";
+import { isAdminRole } from "@/lib/admin/permissions";
 import { LOCALE_COOKIE, LOCALE_HEADER } from "@/lib/i18n/config";
 import { parseLocaleCookie, pickPublicLocale, readCountryFromRequest } from "@/lib/i18n/pick-locale";
 import { getToken } from "next-auth/jwt";
@@ -102,7 +103,8 @@ export async function middleware(req: NextRequest) {
 
   if (path.startsWith("/admin") && !path.startsWith("/admin/login")) {
     const token = await getToken({ req, secret });
-    if (!token) {
+    const role = typeof token?.role === "string" ? token.role : "";
+    if (!token || !isAdminRole(role)) {
       const login = new URL("/admin/login", req.url);
       login.searchParams.set("callbackUrl", path + (req.nextUrl.search || ""));
       return NextResponse.redirect(login);
@@ -111,7 +113,8 @@ export async function middleware(req: NextRequest) {
 
   if (path.startsWith("/api/admin")) {
     const token = await getToken({ req, secret });
-    if (!token) {
+    const role = typeof token?.role === "string" ? token.role : "";
+    if (!token || !isAdminRole(role)) {
       return NextResponse.json(
         { error: { message: "Unauthorized", code: "unauthorized", status: 401 } },
         { status: 401 },

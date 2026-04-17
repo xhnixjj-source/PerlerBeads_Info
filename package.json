@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "tsx scripts/seed_database.ts",
+    "seed:shop": "tsx scripts/seed_shop_products.ts",
     "seed:demo-bulk": "tsx scripts/seed_demo_bulk.ts",
     "create-admin": "tsx scripts/create-admin-user.ts"
   },

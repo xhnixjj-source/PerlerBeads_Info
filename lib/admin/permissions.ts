@@ -21,6 +21,7 @@ type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 /** Resource keys used by admin APIs */
 export type AdminResource =
   | "suppliers"
+  | "categories"
   | "products"
   | "patterns"
   | "orders"
@@ -43,6 +44,13 @@ export function canAccess(role: AdminRole, resource: AdminResource, method: Http
     return role === "super_admin";
   }
 
+  if (resource === "categories") {
+    if (read) {
+      return role === "super_admin" || role === "content_admin" || role === "supplier_admin";
+    }
+    return role === "super_admin" || role === "content_admin";
+  }
+
   if (role === "super_admin") return true;
 
   if (read) {
@@ -53,11 +61,11 @@ export function canAccess(role: AdminRole, resource: AdminResource, method: Http
 
   switch (role) {
     case "content_admin":
-      return ["patterns", "blog", "products", "upload"].includes(resource);
+      return ["patterns", "blog", "products", "categories", "upload"].includes(resource);
     case "order_admin":
       return ["orders", "inquiries", "upload"].includes(resource);
     case "supplier_admin":
-      return ["suppliers", "products", "upload"].includes(resource);
+      return ["suppliers", "products", "categories", "upload"].includes(resource);
     default:
       return false;
   }
@@ -80,6 +88,7 @@ export function adminNavHrefsForRole(role: AdminRole): Set<string> {
     return new Set([
       dash,
       "/admin/suppliers",
+      "/admin/categories",
       "/admin/products",
       "/admin/patterns",
       "/admin/orders",
@@ -91,7 +100,9 @@ export function adminNavHrefsForRole(role: AdminRole): Set<string> {
     ]);
   }
   if (role === "content_admin") {
-    ["/admin/products", "/admin/patterns", "/admin/blog", "/admin/ai"].forEach((h) => base.add(h));
+    ["/admin/products", "/admin/categories", "/admin/patterns", "/admin/blog", "/admin/ai"].forEach((h) =>
+      base.add(h),
+    );
     return base;
   }
   if (role === "order_admin") {
@@ -99,7 +110,7 @@ export function adminNavHrefsForRole(role: AdminRole): Set<string> {
     return base;
   }
   if (role === "supplier_admin") {
-    ["/admin/suppliers", "/admin/products"].forEach((h) => base.add(h));
+    ["/admin/suppliers", "/admin/categories", "/admin/products"].forEach((h) => base.add(h));
     return base;
   }
   return base;

@@ -9,6 +9,7 @@ export type Messages = {
   };
   nav: {
     home: string;
+    shop: string;
     directory: string;
     patterns: string;
     community: string;
@@ -17,6 +18,7 @@ export type Messages = {
     contact: string;
     signIn: string;
     signUp: string;
+    signOut: string;
     buyKit: string;
     cartAria: string;
     patternsAll: string;

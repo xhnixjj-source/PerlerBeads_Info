@@ -20,7 +20,11 @@ export async function GET(request: Request, context: Ctx) {
   const idParse = uuidParam.safeParse(context.params.id);
   if (!idParse.success) return jsonError(400, "Invalid id", "validation");
 
-  const { data, error } = await supabase.from("products").select("*").eq("id", idParse.data).maybeSingle();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*, category:categories(id, name, slug)")
+    .eq("id", idParse.data)
+    .maybeSingle();
   if (error) {
     console.error("[admin products GET id]", error.message);
     return jsonError(500, error.message, "database");

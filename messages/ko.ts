@@ -11,6 +11,7 @@ export const ko: Messages = {
   },
   nav: {
     home: "홈",
+    shop: "스토어",
     directory: "디렉터리",
     patterns: "도안",
     community: "커뮤니티",
@@ -19,6 +20,7 @@ export const ko: Messages = {
     contact: "문의",
     signIn: "로그인",
     signUp: "가입",
+    signOut: "로그아웃",
     buyKit: "풀 키트 구매",
     cartAria: "장바구니",
     patternsAll: "전체 도안",

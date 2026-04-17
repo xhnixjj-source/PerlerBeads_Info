@@ -5,20 +5,21 @@ import { AdminDataTable } from "@/components/admin/AdminDataTable";
 
 export function ProductsAdminTable({ rows }: { rows: Record<string, unknown>[] }) {
   const categories = useMemo(() => {
-    const set = new Set<string>();
+    const map = new Map<string, string>();
     for (const r of rows) {
-      const c = String(r.category ?? "").trim();
-      if (c) set.add(c);
+      const slug = String(r.category_slug ?? "").trim();
+      const name = String(r.category_name ?? "").trim();
+      if (slug) map.set(slug, name || slug);
     }
-    return Array.from(set)
-      .sort()
-      .map((value) => ({ value, label: value }));
+    return Array.from(map.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([value, label]) => ({ value, label }));
   }, [rows]);
 
   return (
     <AdminDataTable
       title="Products"
-      description="Wholesale SKUs linked to suppliers."
+      description="Store SKUs, categories, and inventory."
       rows={rows}
       getRowId={(r) => String(r.id ?? "")}
       exportFilename="products-export"
@@ -27,7 +28,7 @@ export function ProductsAdminTable({ rows }: { rows: Record<string, unknown>[] }
       filter={
         categories.length
           ? {
-              key: "category",
+              key: "category_slug",
               label: "Category",
               allLabel: "All categories",
               options: categories,
@@ -37,7 +38,12 @@ export function ProductsAdminTable({ rows }: { rows: Record<string, unknown>[] }
       columns={[
         { key: "name", label: "Name" },
         { key: "slug", label: "Slug" },
-        { key: "category", label: "Category" },
+        { key: "category_name", label: "Category" },
+        {
+          key: "list_status",
+          label: "Listing",
+          render: (r) => String(r.list_status ?? "—"),
+        },
         {
           key: "price_usd",
           label: "Price (USD)",

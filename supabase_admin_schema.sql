@@ -47,14 +47,30 @@ create index if not exists idx_patterns_views_count on public.patterns (views_co
 create index if not exists idx_patterns_downloads_count on public.patterns (downloads_count desc);
 
 -- ---------------------------------------------------------------------------
--- 2. products（商品；独立表，与 suppliers.products JSON 列可并存）
+-- 2. products（商城自营 SKU；类目见 public.categories，迁移见 supabase/migrations/20260418000001_*）
 -- ---------------------------------------------------------------------------
+create table if not exists public.categories (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  slug text not null unique,
+  description text not null default '',
+  sort_order int not null default 0,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+drop trigger if exists trg_categories_set_updated_at on public.categories;
+create trigger trg_categories_set_updated_at
+  before update on public.categories
+  for each row
+  execute procedure public.set_updated_at();
+
 create table if not exists public.products (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
-  supplier_id uuid not null references public.suppliers (id) on delete cascade,
+  category_id uuid references public.categories (id) on delete set null,
   name text not null,
-  category text not null default '',
   description text not null default '',
   price_usd numeric(12, 2) check (price_usd is null or price_usd >= 0),
   price_cny numeric(12, 2) check (price_cny is null or price_cny >= 0),
@@ -65,12 +81,17 @@ create table if not exists public.products (
   specifications jsonb not null default '{}'::jsonb,
   tags jsonb not null default '[]'::jsonb,
   featured boolean not null default false,
+  list_status text not null default 'published'
+    check (list_status in ('draft', 'published')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
-create index if not exists idx_products_supplier_id on public.products (supplier_id);
-create index if not exists idx_products_category on public.products (category);
+-- 兼容旧库：若仍存在 supplier_id / category 文本列，由迁移 20260418000001 负责删除与回填
+alter table public.products add column if not exists category_id uuid references public.categories (id) on delete set null;
+alter table public.products add column if not exists list_status text not null default 'published';
+
+create index if not exists idx_products_category_id on public.products (category_id);
 create index if not exists idx_products_featured on public.products (featured) where featured = true;
 create index if not exists idx_products_created_at on public.products (created_at desc);
 

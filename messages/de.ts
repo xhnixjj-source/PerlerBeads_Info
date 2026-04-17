@@ -12,6 +12,7 @@ export const de: Messages = {
   },
   nav: {
     home: "Start",
+    shop: "Shop",
     directory: "Verzeichnis",
     patterns: "Muster",
     community: "Community",
@@ -20,6 +21,7 @@ export const de: Messages = {
     contact: "Kontakt",
     signIn: "Anmelden",
     signUp: "Registrieren",
+    signOut: "Abmelden",
     buyKit: "Komplett-Set kaufen",
     cartAria: "Warenkorb",
     patternsAll: "Alle Muster",

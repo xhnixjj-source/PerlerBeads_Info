@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { RemoteCoverImage } from "@/components/RemoteCoverImage";
 import type { Pattern } from "@/lib/types/pattern";
 import { demoSaveCount, demoWeeklyViews, formatDemoCount } from "@/lib/demo-stats";
 
@@ -10,7 +10,8 @@ type Props = {
 export function PatternCard({ pattern }: Props) {
   return (
     <article className="overflow-hidden rounded-2xl border border-ink-200 bg-white shadow-sm">
-      <Image
+      <RemoteCoverImage
+        variant="fixed"
         src={pattern.image_url}
         alt={pattern.title}
         width={640}

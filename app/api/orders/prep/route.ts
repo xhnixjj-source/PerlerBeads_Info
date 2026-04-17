@@ -65,13 +65,17 @@ export async function POST(request: Request) {
   }
 
   const stripe_session_id = `prep_${randomUUID()}`;
+  const totalUsd = KIT_PRICE_CENTS / 100;
 
   const { error } = await supabase.from("orders").insert({
+    order_number: stripe_session_id,
     stripe_session_id,
     pattern_id: patternId,
     amount_total: KIT_PRICE_CENTS,
+    total_price: totalUsd,
     currency: "usd",
     status: "Pending",
+    order_type: "pattern_kit",
   });
 
   if (error) {

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { RemoteCoverImage } from "@/components/RemoteCoverImage";
 import type { Pattern } from "@/lib/types/pattern";
 import { formatLikeCount, stableLikeCount } from "@/lib/engagement";
 import {
@@ -26,10 +26,10 @@ export function TrendingPatternCard({ pattern }: Props) {
     <article className="w-[min(260px,85vw)] shrink-0 snap-start overflow-hidden rounded-2xl border border-ink-200/90 bg-white shadow-md">
       <div className="h-1.5 bg-gradient-to-r from-brand-primary via-brand-yellow to-brand-secondary" />
       <div className="relative h-36 w-full">
-        <Image
+        <RemoteCoverImage
+          variant="fill"
           src={pattern.image_url}
           alt={pattern.title}
-          fill
           className="object-cover"
           sizes="260px"
         />

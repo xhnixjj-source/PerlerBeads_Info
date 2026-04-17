@@ -5,6 +5,8 @@ declare module "next-auth" {
     user: {
       id: string;
       role: string;
+      /** Present when using JWT callbacks in `lib/auth.ts`. */
+      kind?: "admin" | "customer";
     } & DefaultSession["user"];
   }
 
@@ -18,5 +20,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     id?: string;
     role?: string;
+    kind?: "admin" | "customer";
   }
 }

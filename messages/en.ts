@@ -12,6 +12,7 @@ export const en: Messages = {
   },
   nav: {
     home: "Home",
+    shop: "Store",
     directory: "Directory",
     patterns: "Patterns",
     community: "Community",
@@ -20,6 +21,7 @@ export const en: Messages = {
     contact: "Contact",
     signIn: "Sign In",
     signUp: "Sign Up",
+    signOut: "Sign out",
     buyKit: "Buy Complete Kit",
     cartAria: "Cart",
     patternsAll: "All patterns",

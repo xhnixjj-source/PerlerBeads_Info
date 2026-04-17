@@ -12,6 +12,7 @@ export const fr: Messages = {
   },
   nav: {
     home: "Accueil",
+    shop: "Boutique",
     directory: "Annuaire",
     patterns: "Motifs",
     community: "Communauté",
@@ -20,6 +21,7 @@ export const fr: Messages = {
     contact: "Contact",
     signIn: "Connexion",
     signUp: "Inscription",
+    signOut: "Déconnexion",
     buyKit: "Acheter le kit complet",
     cartAria: "Panier",
     patternsAll: "Tous les motifs",

@@ -1,6 +1,6 @@
 "use client";
 
-import { adminNavHrefsForRole } from "@/lib/admin/permissions";
+import { adminNavHrefsForRole, isAdminRole } from "@/lib/admin/permissions";
 import type { AdminRole } from "@/lib/admin/permissions";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,6 +10,7 @@ import { useMemo, useState } from "react";
 const nav = [
   { href: "/admin/dashboard", label: "控制台" },
   { href: "/admin/suppliers", label: "供应商" },
+  { href: "/admin/categories", label: "类目" },
   { href: "/admin/products", label: "商品" },
   { href: "/admin/patterns", label: "图纸" },
   { href: "/admin/orders", label: "订单" },
@@ -64,7 +65,8 @@ export function AdminChrome({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
-  const role = session?.user?.role as AdminRole | undefined;
+  const rawRole = session?.user?.role;
+  const role = typeof rawRole === "string" && isAdminRole(rawRole) ? rawRole : undefined;
   const allowed = useMemo(() => {
     if (status === "loading" || !role) {
       return new Set<string>(["/admin/dashboard"]);

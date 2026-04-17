@@ -3,6 +3,8 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { GlobalSearch } from "@/components/GlobalSearch";
 import { NavDropdown } from "@/components/NavDropdown";
 import { PerlerHubLogo } from "@/components/PerlerHubLogo";
+import { HeaderAuthLinks } from "@/components/site/HeaderAuthLinks";
+import { HeaderCartButton } from "@/components/site/HeaderCartButton";
 import type { Messages } from "@/messages";
 
 export function SiteHeader({ messages: m }: { messages: Messages }) {
@@ -27,16 +29,7 @@ export function SiteHeader({ messages: m }: { messages: Messages }) {
           <div className="flex items-center justify-between gap-4">
             <PerlerHubLogo />
             <div className="flex items-center gap-2 lg:hidden">
-              <Link
-                href="#cart"
-                className="relative rounded-xl p-2 text-brand-text/70 hover:bg-brand-mint/30"
-                aria-label={m.nav.cartAria}
-              >
-                <CartIcon />
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-coral px-1 text-[10px] font-bold text-white">
-                  0
-                </span>
-              </Link>
+              <HeaderCartButton cartAria={m.nav.cartAria} />
             </div>
           </div>
 
@@ -46,6 +39,12 @@ export function SiteHeader({ messages: m }: { messages: Messages }) {
               className="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-emerald-600 hover:bg-brand-mint/20"
             >
               {m.nav.home}
+            </Link>
+            <Link
+              href="/products"
+              className="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-teal-600 hover:bg-teal-50"
+            >
+              {m.nav.shop}
             </Link>
             <Link
               href="/suppliers"
@@ -79,25 +78,10 @@ export function SiteHeader({ messages: m }: { messages: Messages }) {
             <GlobalSearch />
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
               <LanguageSwitcher />
-              <Link
-                href="#cart"
-                className="relative hidden rounded-xl p-2 text-brand-text/70 hover:bg-brand-mint/30 lg:inline-flex"
-                aria-label={m.nav.cartAria}
-              >
-                <CartIcon />
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-gradient-to-r from-brand-primary to-brand-coral px-1 text-[10px] font-bold text-white">
-                  0
-                </span>
-              </Link>
-              <Link href="#sign-in" className="text-sm font-medium text-brand-text/70 hover:text-brand-text">
-                {m.nav.signIn}
-              </Link>
-              <Link
-                href="#sign-up"
-                className="text-sm font-medium text-brand-secondary hover:text-brand-secondary-deep"
-              >
-                {m.nav.signUp}
-              </Link>
+              <span className="hidden lg:inline-flex">
+                <HeaderCartButton cartAria={m.nav.cartAria} />
+              </span>
+              <HeaderAuthLinks signInLabel={m.nav.signIn} signUpLabel={m.nav.signUp} signOutLabel={m.nav.signOut} />
               <Link
                 href="/wholesale"
                 className="inline-flex rounded-full bg-gradient-to-r from-brand-primary to-brand-coral px-4 py-2.5 text-xs font-bold text-white shadow-md transition hover:brightness-105 sm:text-sm"
@@ -111,6 +95,9 @@ export function SiteHeader({ messages: m }: { messages: Messages }) {
         <div className="mt-3 flex flex-wrap gap-2 border-t border-ink-100 pt-3 lg:hidden">
           <Link href="/" className="text-xs font-semibold text-emerald-600">
             {m.nav.home}
+          </Link>
+          <Link href="/products" className="text-xs font-semibold text-teal-600">
+            {m.nav.shop}
           </Link>
           <Link href="/suppliers" className="text-xs font-semibold text-rose-500">
             {m.nav.directory}
@@ -133,18 +120,5 @@ export function SiteHeader({ messages: m }: { messages: Messages }) {
         </div>
       </div>
     </header>
-  );
-}
-
-function CartIcon() {
-  return (
-    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-      />
-    </svg>
   );
 }

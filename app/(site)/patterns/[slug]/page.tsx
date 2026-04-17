@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
+import { RemoteCoverImage } from "@/components/RemoteCoverImage";
 import { notFound } from "next/navigation";
 import { ShareButtons } from "@/components/ShareButtons";
 import { getPatternBySlug, getRelatedPatterns } from "@/lib/catalog";
@@ -82,7 +82,8 @@ export default async function PatternDetailPage({ params }: Props) {
           </nav>
 
           <div className="overflow-hidden rounded-2xl border border-ink-200 shadow-sm">
-            <Image
+            <RemoteCoverImage
+              variant="fixed"
               src={pattern.image_url}
               alt={pattern.title}
               width={1280}

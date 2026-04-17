@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { RemoteCoverImage } from "@/components/RemoteCoverImage";
 import type { Supplier } from "@/lib/types/supplier";
 import { demoSupplierInquiries30d, demoSupplierResponseHours } from "@/lib/demo-stats";
 
@@ -14,7 +14,13 @@ export function HomeSupplierCard({ supplier }: Props) {
     <article className="overflow-hidden rounded-2xl border border-ink-200/90 bg-white shadow-md">
       <div className="relative aspect-[4/3] w-full bg-gradient-to-br from-brand-mint/40 to-brand-lavender/30">
         {cover ? (
-          <Image src={cover} alt="" fill className="object-cover" sizes="(max-width: 1024px) 50vw, 25vw" />
+          <RemoteCoverImage
+            variant="fill"
+            src={cover}
+            alt=""
+            className="object-cover"
+            sizes="(max-width: 1024px) 50vw, 25vw"
+          />
         ) : (
           <div className="flex h-full items-center justify-center font-heading text-4xl font-bold text-brand-text/20">
             {supplier.company_name.slice(0, 1)}

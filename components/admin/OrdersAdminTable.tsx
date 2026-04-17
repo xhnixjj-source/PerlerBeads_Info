@@ -3,12 +3,17 @@
 import { AdminDataTable } from "@/components/admin/AdminDataTable";
 
 const STATUS_OPTIONS = [
-  { value: "pending", label: "Pending" },
-  { value: "paid", label: "Paid" },
-  { value: "processing", label: "Processing" },
-  { value: "shipped", label: "Shipped" },
-  { value: "completed", label: "Completed" },
-  { value: "cancelled", label: "Cancelled" },
+  { value: "Pending", label: "Pending" },
+  { value: "Paid", label: "Paid" },
+  { value: "Shipped", label: "Shipped" },
+  { value: "Delivered", label: "Delivered" },
+  { value: "Canceled", label: "Canceled" },
+  { value: "pending", label: "pending (legacy)" },
+  { value: "paid", label: "paid (legacy)" },
+  { value: "processing", label: "processing (legacy)" },
+  { value: "shipped", label: "shipped (legacy)" },
+  { value: "completed", label: "completed (legacy)" },
+  { value: "cancelled", label: "cancelled (legacy)" },
 ];
 
 export function OrdersAdminTable({ rows }: { rows: Record<string, unknown>[] }) {

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { RemoteCoverImage } from "@/components/RemoteCoverImage";
 
 type Props = {
   imageUrls: string[];
@@ -19,10 +19,10 @@ export function CommunityCreations({ imageUrls }: Props) {
               i % 5 === 0 ? "aspect-[4/5]" : i % 3 === 0 ? "aspect-square" : "aspect-[3/4]"
             }`}
           >
-            <Image
+            <RemoteCoverImage
+              variant="fill"
               src={src}
               alt=""
-              fill
               className="object-cover"
               sizes="(max-width: 640px) 45vw, 25vw"
             />
