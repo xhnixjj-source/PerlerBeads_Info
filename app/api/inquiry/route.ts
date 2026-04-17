@@ -130,10 +130,11 @@ export async function POST(request: Request) {
 
   try {
     const supabase = createSupabaseAdmin();
-    // Table columns are `name` / `email` (B2B buyer identity); buyer_* aliases accepted in JSON.
+    // `email` is the app-facing field; some DBs also require `buyer_email` (NOT NULL) from legacy migrations.
     const { error } = await supabase.from("inquiries").insert({
       name,
       email,
+      buyer_email: email,
       company: company || null,
       quantity: quantity || null,
       message,
