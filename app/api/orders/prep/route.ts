@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
-import { createSupabaseServiceClient } from "@/lib/supabase/server";
+import { createSupabaseServiceClient, missingSupabaseServiceEnv } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
@@ -54,11 +54,11 @@ export async function POST(request: Request) {
 
   const supabase = createSupabaseServiceClient();
   if (!supabase) {
+    const missing = missingSupabaseServiceEnv();
     return NextResponse.json(
       {
         ok: false,
-        error:
-          "Server is missing SUPABASE_SERVICE_ROLE_KEY. Add it to record pre-orders (bypasses RLS).",
+        error: `Server misconfiguration: missing ${missing.join(" and ")}. Set them in Vercel (Production) for pre-orders; redeploy after saving.`,
       },
       { status: 503 },
     );
