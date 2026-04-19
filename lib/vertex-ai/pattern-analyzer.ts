@@ -1,6 +1,14 @@
 import type { GenerativeModel } from "@google-cloud/vertexai";
 import { getVertexAI, getVertexModelId } from "@/lib/vertex-ai/client";
 import type { PatternMetadata } from "@/lib/vertex-ai/types";
+import { Agent, fetch as undiciFetch } from "undici";
+
+/** Longer timeouts than Node's default fetch (undici ~10s connect) for slow CDNs (e.g. Amazon media). */
+const imageFetchAgent = new Agent({
+  connectTimeout: 60_000,
+  headersTimeout: 120_000,
+  bodyTimeout: 120_000,
+});
 
 function getVisionModel(): GenerativeModel | null {
   const vertex = getVertexAI();
@@ -45,7 +53,14 @@ function guessMimeFromUrl(url: string): string {
 }
 
 async function fetchImageAsBase64(imageUrl: string): Promise<{ mimeType: string; data: string }> {
-  const res = await fetch(imageUrl, { cache: "no-store" });
+  const res = (await undiciFetch(imageUrl, {
+    dispatcher: imageFetchAgent,
+    headers: {
+      "User-Agent": "PerlerHub/1.0 (server; pattern image fetch for Vertex analysis)",
+      Accept: "image/*,*/*;q=0.8",
+    },
+  })) as unknown as Response;
+
   if (!res.ok) {
     throw new Error(`Failed to fetch image: ${res.status}`);
   }

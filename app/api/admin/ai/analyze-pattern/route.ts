@@ -2,6 +2,7 @@ import { jsonError, requireAdminRequest } from "@/lib/admin/api-auth";
 import { jsonData } from "@/lib/admin/http";
 import { canAccess } from "@/lib/admin/permissions";
 import { analyzePatternImage, analyzePatternImageBuffer } from "@/lib/vertex-ai/pattern-analyzer";
+import { mapVertexClientError } from "@/lib/vertex-ai/route-errors";
 import { isVertexConfigured } from "@/lib/vertex-ai/client";
 
 export const runtime = "nodejs";
@@ -53,8 +54,14 @@ export async function POST(request: Request) {
     }
     return jsonData({ metadata, source: "url" });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Analysis failed";
-    console.error("[analyze-pattern]", msg);
+    const err = e instanceof Error ? e : new Error(String(e));
+    const msg = err.message || "Analysis failed";
+    const cause = err.cause instanceof Error ? err.cause.message : err.cause != null ? String(err.cause) : "";
+    console.error("[analyze-pattern]", msg, cause ? `cause=${cause}` : "");
+
+    const mapped = mapVertexClientError(e);
+    if (mapped) return jsonError(mapped.status, mapped.message, mapped.code);
+
     return jsonError(502, msg, "vertex");
   }
 }

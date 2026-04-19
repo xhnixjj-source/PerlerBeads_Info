@@ -9,33 +9,6 @@ import { isAdminRole } from "@/lib/admin/permissions";
 import { getNextAuthSecret } from "@/lib/next-auth-secret";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 
-// #region agent log
-function debugAuthLog(payload: {
-  hypothesisId: string;
-  message: string;
-  data: Record<string, unknown>;
-  location: string;
-  runId?: string;
-}) {
-  fetch("http://127.0.0.1:7722/ingest/fe92ae1a-8de2-4083-b267-ba230f14e8ca", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": "8b42ff",
-    },
-    body: JSON.stringify({
-      sessionId: "8b42ff",
-      runId: payload.runId,
-      hypothesisId: payload.hypothesisId,
-      location: payload.location,
-      message: payload.message,
-      data: payload.data,
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-}
-// #endregion
-
 const googleConfigured =
   Boolean(process.env.GOOGLE_CLIENT_ID?.trim()) && Boolean(process.env.GOOGLE_CLIENT_SECRET?.trim());
 const facebookConfigured =
@@ -47,50 +20,6 @@ const oauthHttpTimeoutMs = Math.max(
   Number.parseInt(process.env.OAUTH_HTTP_TIMEOUT_MS ?? "20000", 10) || 20000,
 );
 const oauthHttpOptions = { timeout: oauthHttpTimeoutMs };
-
-// #region agent log
-debugAuthLog({
-  hypothesisId: "H4",
-  message: "auth_env_flags",
-  location: "lib/auth.ts:module_init",
-  data: {
-    googleConfigured,
-    facebookConfigured,
-    hasNextAuthUrl: Boolean(process.env.NEXTAUTH_URL?.trim()),
-    oauthHttpTimeoutMs,
-    nodeEnv: process.env.NODE_ENV,
-  },
-});
-// #endregion
-
-// #region agent log
-void (async () => {
-  const hosts = ["oauth2.googleapis.com", "accounts.google.com"] as const;
-  const dns = await import("dns/promises");
-  for (const hostname of hosts) {
-    try {
-      const records = await dns.lookup(hostname, { all: true });
-      debugAuthLog({
-        hypothesisId: "H2",
-        message: "dns_lookup_ok",
-        location: "lib/auth.ts:dns_probe",
-        data: { hostname, records },
-      });
-    } catch (e) {
-      debugAuthLog({
-        hypothesisId: "H2",
-        message: "dns_lookup_fail",
-        location: "lib/auth.ts:dns_probe",
-        data: {
-          hostname,
-          errName: e instanceof Error ? e.name : "unknown",
-          errMessage: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
-        },
-      });
-    }
-  }
-})();
-// #endregion
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -165,39 +94,6 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
-  // #region agent log
-  logger: {
-    warn(code) {
-      console.warn("[next-auth]", code);
-    },
-    debug(code, meta) {
-      if (process.env.NODE_ENV === "development") console.debug("[next-auth]", code, meta);
-    },
-    error(code, metadata) {
-      console.error("[next-auth]", code, metadata);
-      const m = metadata as Record<string, unknown> | undefined;
-      const nested = m?.error as { message?: string; stack?: string; name?: string } | undefined;
-      const stack = nested?.stack ?? (metadata instanceof Error ? metadata.stack : "") ?? "";
-      const msg = nested?.message ?? (metadata instanceof Error ? metadata.message : "") ?? "";
-      const combined = `${msg}\n${stack}`;
-      const timedOut = /ETIMEDOUT|timeout/i.test(combined);
-      const aggregate = /AggregateError/i.test(stack);
-      debugAuthLog({
-        hypothesisId: timedOut ? "H1" : aggregate ? "H3" : "H_other",
-        message: "nextauth_logger_error",
-        location: "lib/auth.ts:logger.error",
-        data: {
-          code: String(code),
-          providerId: typeof m?.providerId === "string" ? m.providerId : undefined,
-          errName: nested?.name,
-          errMessageSnippet: (nested?.message ?? "").slice(0, 120),
-          stackSnippet: stack.slice(0, 400),
-          aggregateErrorShape: aggregate,
-        },
-      });
-    },
-  },
-  // #endregion
   callbacks: {
     async jwt({ token, user, account }) {
       if (user && isAdminRole(String((user as { role?: string }).role ?? ""))) {
